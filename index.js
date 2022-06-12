@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-import * as fs from 'fs';
 let workingversion = 5; // current version, that has been checked
 // Searches for the package results
 
@@ -16,14 +15,14 @@ export async function search(lookup, type, verbose) {
         case "maintainer" || "author" || "maker":
             lookupURL = `https://aur.archlinux.org/rpc/?v=5&type=search&by=maintainer&arg=${lookup}`;
             break;
-        case "makedepends":
+        case "makedepends" || "makedependants":
             lookupURL = `https://aur.archlinux.org/rpc/?v=5&type=search&by=makedepends&arg=${lookup}`;
             break;
-        case "depends":
+        case "depends" || "dependants":
             lookupURL = `https://aur.archlinux.org/rpc/?v=5&type=search&by=depends&arg=${lookup}`;
             break;
         default:
-            console.error("Error from: search.js\nThis isn't a correct type to lookup");
+            console.error(`Error from: aurlookup\nThis isn't a correct type to lookup.\nYou selected: ${type} where you can only have: package,maintainer,makedepends and depends.`);
     }
     // return data
     (verbose == true) ? console.log(`Found lookup URL: ${lookupURL}`)  : null;
@@ -31,6 +30,11 @@ export async function search(lookup, type, verbose) {
     const response = await fetch(lookupURL);
     const data = await response.json();
     (verbose == true) ? console.log(`Found ${lookup}(s) in AUR`) : null;
+    // add the git clone url to data
+    (verbose == true) ? console.log(`Adding git-clone URLs to response data.`) : null;
+    for (var index in data["results"]) {
+        data.results[index].gitURL = `https://aur.archlinux.org/` + data.results[index].Name + `.git`; 
+    }
     if (workingversion != data.version) {
         data.warning = `This database is on version ${data.version} whereas this database is only updated to version ${workingversion}`;
     }
