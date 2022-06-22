@@ -2,6 +2,7 @@
 **A light lookup tool for the arch user repository.**
 
 1.1.0: Added gitURL
+
 1.0: Initial Release
 
 
