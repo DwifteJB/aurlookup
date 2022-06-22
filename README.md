@@ -1,6 +1,10 @@
 # AUR Lookup
 **A light lookup tool for the arch user repository.**
 
+1.1.0: Added gitURL
+1.0: Initial Release
+
+
 ## Usage:
 
 ### Search for packages by name
@@ -35,4 +39,3 @@
 ## JSON Example:
 
 **Open the examples/ folder to see an example of what json files you can get/**
-
